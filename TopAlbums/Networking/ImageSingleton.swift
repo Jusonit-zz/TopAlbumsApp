@@ -38,10 +38,6 @@ struct ImageSingleton {
                     completionHandler(cachedImage)
                 }
             } else {
-                guard let placeholder = UIImage(named: "loading") else {return}
-                DispatchQueue.main.async {
-                    completionHandler(placeholder)
-                }
                 let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                     if let error = error {
                         print(error)

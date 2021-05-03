@@ -9,6 +9,10 @@ import UIKit
 
 extension UIView: ViewExtensionProtocol {
     
+    func addSubviews(_ views: UIView...) {
+        views.forEach(addSubview)
+    }
+    
     func anchor(top: NSLayoutYAxisAnchor?,
                 paddingTop: CGFloat,
                 bottom: NSLayoutYAxisAnchor?,

@@ -19,7 +19,7 @@
 		C92C13BD263E0679009AF420 /* AlbumJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92C13BC263E0679009AF420 /* AlbumJson.swift */; };
 		C92C13C5263E0743009AF420 /* AlbumDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92C13C4263E0743009AF420 /* AlbumDetails.swift */; };
 		C92C13CB263E0C3E009AF420 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92C13CA263E0C3E009AF420 /* Constants.swift */; };
-		C92C13D0263E0D88009AF420 /* AlbumsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92C13CF263E0D88009AF420 /* AlbumsController.swift */; };
+		C92C13D0263E0D88009AF420 /* AlbumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92C13CF263E0D88009AF420 /* AlbumService.swift */; };
 		C92ED37F263E577F00A948C6 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92ED37E263E577F00A948C6 /* AlbumTableViewCell.swift */; };
 		C92ED387263E5A1700A948C6 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92ED386263E5A1700A948C6 /* Album.swift */; };
 		C92ED39C263E5DD200A948C6 /* ViewProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92ED39B263E5DD200A948C6 /* ViewProtocols.swift */; };
@@ -66,7 +66,7 @@
 		C92C13BC263E0679009AF420 /* AlbumJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumJson.swift; sourceTree = "<group>"; };
 		C92C13C4263E0743009AF420 /* AlbumDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetails.swift; sourceTree = "<group>"; };
 		C92C13CA263E0C3E009AF420 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		C92C13CF263E0D88009AF420 /* AlbumsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsController.swift; sourceTree = "<group>"; };
+		C92C13CF263E0D88009AF420 /* AlbumService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumService.swift; sourceTree = "<group>"; };
 		C92ED37E263E577F00A948C6 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		C92ED386263E5A1700A948C6 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		C92ED39B263E5DD200A948C6 /* ViewProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewProtocols.swift; sourceTree = "<group>"; };
@@ -102,6 +102,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E49430126402F0F0000D1A7 /* Project Files */ = {
+			isa = PBXGroup;
+			children = (
+				C92C1383263E04B7009AF420 /* Assets.xcassets */,
+				C92C1385263E04B7009AF420 /* LaunchScreen.storyboard */,
+				C92C1388263E04B7009AF420 /* Info.plist */,
+			);
+			name = "Project Files";
+			sourceTree = "<group>";
+		};
+		9E49430226402F470000D1A7 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				C92C137A263E04B5009AF420 /* AppDelegate.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
 		C92C136E263E04B5009AF420 = {
 			isa = PBXGroup;
 			children = (
@@ -125,17 +143,13 @@
 		C92C1379263E04B5009AF420 /* TopAlbums */ = {
 			isa = PBXGroup;
 			children = (
-				C92C13C9263E0C1A009AF420 /* Helpers&Extensions */,
+				9E49430226402F470000D1A7 /* AppDelegate */,
+				C92C13C9263E0C1A009AF420 /* Helpers+Extensions */,
 				C92C13B2263E04FD009AF420 /* Networking */,
 				C92C13B1263E04F7009AF420 /* Model */,
 				C92C13B0263E04F0009AF420 /* ViewController */,
 				C92C13AF263E04E7009AF420 /* Cell */,
-				C92C13AE263E04DC009AF420 /* Controller */,
-				C92C13AD263E04D4009AF420 /* Supporting Files */,
-				C92C137A263E04B5009AF420 /* AppDelegate.swift */,
-				C92C1383263E04B7009AF420 /* Assets.xcassets */,
-				C92C1385263E04B7009AF420 /* LaunchScreen.storyboard */,
-				C92C1388263E04B7009AF420 /* Info.plist */,
+				9E49430126402F0F0000D1A7 /* Project Files */,
 			);
 			path = TopAlbums;
 			sourceTree = "<group>";
@@ -156,21 +170,6 @@
 				C92C139E263E04B7009AF420 /* Info.plist */,
 			);
 			path = TopAlbumsUITests;
-			sourceTree = "<group>";
-		};
-		C92C13AD263E04D4009AF420 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		C92C13AE263E04DC009AF420 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				C92C13CF263E0D88009AF420 /* AlbumsController.swift */,
-			);
-			path = Controller;
 			sourceTree = "<group>";
 		};
 		C92C13AF263E04E7009AF420 /* Cell */ = {
@@ -204,23 +203,24 @@
 			isa = PBXGroup;
 			children = (
 				C92C13B3263E0524009AF420 /* NetworkManager.swift */,
+				C92C13CF263E0D88009AF420 /* AlbumService.swift */,
 				C90DF4A9263F08BD00A4111B /* ImageSingleton.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		C92C13C9263E0C1A009AF420 /* Helpers&Extensions */ = {
+		C92C13C9263E0C1A009AF420 /* Helpers+Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				C92ED39B263E5DD200A948C6 /* ViewProtocols.swift */,
+				C92ED3A8263E5FAF00A948C6 /* UIViewExtensions.swift */,
 				C92C13CA263E0C3E009AF420 /* Constants.swift */,
 				C92ED3A3263E5DFD00A948C6 /* NetworkErrors.swift */,
-				C92ED3A8263E5FAF00A948C6 /* UIViewExtensions.swift */,
 				C92ED3AD263E602300A948C6 /* ColorsExtension.swift */,
 				C92ED3B2263E60BF00A948C6 /* VCExtension.swift */,
 				C92ED3B7263E613900A948C6 /* ImageViewExtensions.swift */,
 			);
-			path = "Helpers&Extensions";
+			path = "Helpers+Extensions";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,7 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C92C13D0263E0D88009AF420 /* AlbumsController.swift in Sources */,
+				C92C13D0263E0D88009AF420 /* AlbumService.swift in Sources */,
 				C92ED3AE263E602300A948C6 /* ColorsExtension.swift in Sources */,
 				C92ED3B8263E613900A948C6 /* ImageViewExtensions.swift in Sources */,
 				C92C13C5263E0743009AF420 /* AlbumDetails.swift in Sources */,

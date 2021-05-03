@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AlbumsController {
+struct AlbumService {
     
     private let urlString = "https://rss.itunes.apple.com/api/v1/us/itunes-music/top-albums/all/100/explicit"
 

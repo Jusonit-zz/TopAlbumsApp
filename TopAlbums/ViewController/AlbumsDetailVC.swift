@@ -35,30 +35,85 @@ class AlbumsDetailVC: UIViewController {
     
     func updateFullImage() {
         guard let hdString = album?.hdArtworkString else { return }
-        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
-            self.artworkImageView.loadImage(imagePath: hdString)
-        }, completion: nil)
+        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+            ImageSingleton.shared.runImage(from: hdString) { [weak self] image in
+                self?.artworkImageView.image = image
+            }
+        }
     }
     
     func setConstraints() {
-        view.addSubview(artworkImageView)
-        view.addSubview(coppyRightLabel)
-        view.addSubview(nameLabel)
-        view.addSubview(genreLabel)
-        view.addSubview(releaseDateLabel)
-        view.addSubview(itunesBtn)
-    
-        artworkImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, width: 0, height: view.bounds.height / 3)
-        coppyRightLabel.anchor(top: artworkImageView.bottomAnchor, paddingTop: 8, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 40, right: view.rightAnchor, paddingRight: 40, width: 0, height: 14)
-        nameLabel.anchorWith(top: coppyRightLabel.bottomAnchor, paddingTop: 15, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 15, right: view.rightAnchor, paddingRight: 15, width: 0, greaterHeight: 30)
-        let stackView = UIStackView(arrangedSubviews:  [genreLabel, releaseDateLabel])
-        stackView.axis = .vertical
-        stackView.spacing = 5
-        view.addSubview(stackView)
-        stackView.anchor(top: nameLabel.bottomAnchor, paddingTop: 5, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 15, right: view.rightAnchor, paddingRight: 15, width: 0, height: 50)
+        view.addSubviews(artworkImageView,
+                         coppyRightLabel,
+                         nameLabel,
+                         genreLabel,
+                         releaseDateLabel,
+                         itunesBtn)
         
-        itunesBtn.anchor(top: nil, paddingTop: 0, bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 20, left: view.leftAnchor, paddingLeft: 20, right: view.rightAnchor, paddingRight: 20, width: 0, height: 50)
-        itunesBtn.addTarget(self, action: #selector(viewAlbumBtnTapped), for: .touchUpInside)
+        func setupImageViewConstraints() {
+            artworkImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                                    paddingTop: 0,
+                                    bottom: nil,
+                                    paddingBottom: 0,
+                                    left: view.leftAnchor,
+                                    paddingLeft: 0,
+                                    right: view.rightAnchor,
+                                    paddingRight: 0,
+                                    width: 0,
+                                    height: view.bounds.height / 3)
+        }
+        
+        func setupLabelConstraints() {
+            coppyRightLabel.anchor(top: artworkImageView.bottomAnchor,
+                                   paddingTop: 8,
+                                   bottom: nil,
+                                   paddingBottom: 0,
+                                   left: view.leftAnchor,
+                                   paddingLeft: 40,
+                                   right: view.rightAnchor,
+                                   paddingRight: 40,
+                                   width: 0,
+                                   height: 14)
+            nameLabel.anchorWith(top: coppyRightLabel.bottomAnchor,
+                                 paddingTop: 15,
+                                 bottom: nil,
+                                 paddingBottom: 0,
+                                 left: view.leftAnchor,
+                                 paddingLeft: 15,
+                                 right: view.rightAnchor,
+                                 paddingRight: 15,
+                                 width: 0,
+                                 greaterHeight: 30)
+        }
+        func setupStackViewConstraints() {
+            let stackView = UIStackView(arrangedSubviews:  [genreLabel, releaseDateLabel])
+            stackView.axis = .vertical
+            stackView.spacing = 5
+            view.addSubview(stackView)
+            stackView.anchor(top: nameLabel.bottomAnchor,
+                             paddingTop: 5,
+                             bottom: nil,
+                             paddingBottom: 0,
+                             left: view.leftAnchor,
+                             paddingLeft: 15,
+                             right: view.rightAnchor,
+                             paddingRight: 15,
+                             width: 0,
+                             height: 50)
+            
+            itunesBtn.anchor(top: nil,
+                             paddingTop: 0,
+                             bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                             paddingBottom: 20, left: view.leftAnchor,
+                             paddingLeft: 20, right: view.rightAnchor,
+                             paddingRight: 20, width: 0, height: 50)
+            itunesBtn.addTarget(self, action: #selector(viewAlbumBtnTapped), for: .touchUpInside)
+        }
+        
+        setupImageViewConstraints()
+        setupLabelConstraints()
+        setupStackViewConstraints()
+        
      
     }
     
@@ -77,11 +132,6 @@ class AlbumsDetailVC: UIViewController {
     // MARK: - Properties
     
     var album: Album?
-    var artworkImage: UIImage? {
-        didSet {
-            artworkImageView.image = artworkImage
-        }
-    }
     
     let artworkImageView: UIImageView = {
         let imageView = UIImageView()
@@ -139,16 +189,13 @@ extension AlbumsDetailVC: SKStoreProductViewControllerDelegate {
         storeViewController.delegate = self
 
         let parameters = [ SKStoreProductParameterITunesItemIdentifier : identifier]
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         storeViewController.loadProduct(withParameters: parameters) { [weak self] (loaded, error) -> Void in
             if let error = error {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 print("Error loading SKStore \(error.localizedDescription)")
                 self?.showNoActionAlert(titleStr: "Error Loading iTunes", messageStr: error.localizedDescription, style: .cancel)
             }
             if loaded {
                 self?.present(storeViewController, animated: true, completion: {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 })
             }
         }

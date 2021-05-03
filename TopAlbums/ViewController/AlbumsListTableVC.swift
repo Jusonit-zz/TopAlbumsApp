@@ -9,26 +9,26 @@ import UIKit
 
 class AlbumsListTableVC: UITableViewController{
     
-    // MARK: - Properties
-    let albumController: AlbumsController
-    fileprivate var albums = [Album]()
+    let albumService: AlbumService
     private let albumDetailVC = AlbumsDetailVC()
-    // MARK: - LifeCycle
+    private var albums: [Album] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(AlbumTableViewCell.self, forCellReuseIdentifier: Constants.albumCellId)
-        tableView.prefetchDataSource = self
-        
+        configureTableView()
         setUpUi()
         fetchAlbums()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+    func configureTableView() {
+        tableView.register(AlbumTableViewCell.self, forCellReuseIdentifier: Constants.albumCellId)
     }
-    
-    // MARK: - UI
     
     func setUpUi() {
         view.backgroundColor = .mainColor2
@@ -37,31 +37,27 @@ class AlbumsListTableVC: UITableViewController{
     }
     
     func fetchAlbums() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        albumController.fetchTopAlbums { [weak self] (result) in
+        albumService.fetchTopAlbums { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let albums):
                 self.albums = albums
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                }
-                
             case .failure(let error):
                 DispatchQueue.main.async {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     self.showNoActionAlert(titleStr: "Error Displaying Albums", messageStr: error.localizedDescription, style: .cancel)
                 }
             }
         }
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: - Init
     
-    init(albumController: AlbumsController) {
-        self.albumController = albumController
+    init(albumService: AlbumService) {
+        self.albumService = albumService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -75,7 +71,6 @@ extension AlbumsListTableVC {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return albums.count
     }
     
@@ -84,36 +79,14 @@ extension AlbumsListTableVC {
         
         let album = albums[indexPath.row]
         cell.album = album
-        cell.artworkPath = album.artworkUrl100
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-      
-        guard let cell = tableView.cellForRow(at: indexPath) as? AlbumTableViewCell else { return }
-        
         let album = self.albums[indexPath.row]
         let albumDetailVC = AlbumsDetailVC()
         albumDetailVC.album = album
-        albumDetailVC.artworkImage = cell.artworkImageView.image
-        navigationController?.pushViewController(albumDetailVC, animated: true)
-    }
-    
-    
-    @objc func goToDetailVC() {
-        let albumDetailVC = AlbumsDetailVC()
-        navigationController?.pushViewController(albumDetailVC, animated: true)
-    }
-}
-
-extension AlbumsListTableVC: UITableViewDataSourcePrefetching {
-    
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         
-        for indxPath in indexPaths {
-            let album = self.albums[indxPath.row]
-            guard let url = URL(string: album.artworkUrl100) else { return }
-            URLSession.shared.dataTask(with: url).resume()
-        }
+        navigationController?.pushViewController(albumDetailVC, animated: true)
     }
 }
